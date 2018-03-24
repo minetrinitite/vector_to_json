@@ -20,13 +20,12 @@ def cutoutpbf(sourceFilename, left, bottom, right, top, osmosis):
         commandstring = osmosis + " --read-pbf " + sourceFilename + " --bounding-box top=" + str(top) + \
                         " left=" + str(left) + " bottom=" + str(bottom) + " right=" + str(
             right) + " --write-pbf file=" + \
-                        str(left) + "-" + str(bottom) + "-" + str(right) + "-" + str(top) + ".pbf omitmetadata=true" #inPipe.0=\"w\"
+                        str(left) + "-" + str(bottom) + "-" + str(right) + "-" + str(top) + ".osm.pbf omitmetadata=true" #inPipe.0=\"w\"
         #print(commandstring)
         #with open(sourceFilename, "rb") as sourcefile:
         proc = subprocess.Popen(commandstring, stdout=subprocess.PIPE)
         proc.wait()
-        outputfile = (str(os.path.dirname(os.path.abspath(__file__))) + "\\" + str(left) + "-" + str(bottom) + "-" + str(right) + "-" + str(top) + ".pbf")
-        print(outputfile)
+        outputfile = (str(os.path.dirname(os.path.abspath(__file__))) + "\\" + str(left) + "-" + str(bottom) + "-" + str(right) + "-" + str(top) + ".osm.pbf")
         return outputfile
         # for line in proc.stdout:
         #     #cut.append(line)
@@ -47,14 +46,4 @@ def cutoutpbf(sourceFilename, left, bottom, right, top, osmosis):
 
 
 #r, w = os.pipe()
-
-file = "D:\JsonifyTiles\planet_37.65,55.706_37.661,55.71.osm.pbf"
-osmosisFile = "D:\JsonifyTiles\osmosis-latest\\bin\osmosis.bat"
-left = 37.654
-bottom = 55.707
-right = 37.659
-top = 55.709
-cutoutpbf(file, left, bottom, right, top, osmosisFile)
-
-#37.654 37.659 55.707 55.709
 
