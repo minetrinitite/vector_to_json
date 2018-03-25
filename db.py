@@ -1,10 +1,10 @@
 import redis
 
-"""
-def db_connection(host,port,db):
-    r = redis.StrictRedis(host=host, port=port, db=db)
-    return r
-"""
+
+# def db_connection(host,port,db):
+#     r = redis.StrictRedis(host=host, port=port, db=db)
+#     return r
+
 
 def put_in_db(full_path, host,port,db):
     print(full_path)
@@ -26,12 +26,10 @@ def put_in_db(full_path, host,port,db):
 
 
 def get_from_db(key, host,port,db):
-
-
     r = redis.StrictRedis(host=host, port=port, db=db)
     r.get(key)
 
-    print(r.get(key))
+    r.get(key))
 
 
 
