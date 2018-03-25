@@ -21,6 +21,7 @@ def put_in_db(full_path, host,port,db):
     key = full_path[start_index:last_index]
 
     r.set(key, file)
+    print(full_path)
 
     return key
 
