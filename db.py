@@ -6,6 +6,7 @@ import os
 #     r = redis.StrictRedis(host=host, port=port, db=db)
 #     return r
 
+#this is the testing string to check if i can push to my own branchew
 
 def put_in_db(full_path, host,port,db):
     
