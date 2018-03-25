@@ -1,4 +1,5 @@
 import redis
+import os
 
 
 # def db_connection(host,port,db):
@@ -10,7 +11,7 @@ def put_in_db(full_path, host,port,db):
     print(full_path)
     f = open(full_path, 'rb')
     file = f.read()
-
+    f.close()
     r = redis.StrictRedis(host=host, port=port, db=db)
 
     start_index = full_path.rfind('\\') + 1
@@ -22,7 +23,7 @@ def put_in_db(full_path, host,port,db):
 
     r.set(key, file)
     print(full_path)
-
+    os.remove(key + '.osm.pbf')
     return key
 
 
@@ -31,6 +32,7 @@ def get_from_db(key, host,port,db):
     data = r.get(key)
     f = open(key + '_after_db.osm.pbf', 'wb')
     f.write(data)
+    f.close()
 
 
 
