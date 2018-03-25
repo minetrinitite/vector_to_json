@@ -28,7 +28,7 @@ def put_in_db(full_path, host,port,db):
 def get_from_db(key, host,port,db):
     r = redis.StrictRedis(host=host, port=port, db=db)
     data = r.get(key)
-    f = open(full_path, 'wb')
+    f = open(key + '.osm.pbf', 'wb')
     file = f.read()
 
     r.get(key))
