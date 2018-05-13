@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from lxml import etree
-from geojson import Feature, FeatureCollection, Point, Polygon, LineString, dump, utils, GeometryCollection
+from geojson import Feature, FeatureCollection, Point, Polygon, LineString, dump, GeometryCollection
 import json
 from pympler import asizeof
-from html import parser
+import re
+
 
 #augmentation block
 def featureenter(self):
@@ -25,9 +26,10 @@ def definegeometry(coordinates):
 
 
 def parseXML(xmlFile):
+    xmltag = re.compile(r"<\?.*xml.*\?>", re.IGNORECASE)
     with open(xmlFile, 'r', encoding='utf-8') as fobj:
-        fobj.seek(39) #39 symbols
         xml = fobj.read()
+        xml = xmltag.sub("", string=xml)
 
     root = etree.fromstring(xml)
     print(str(asizeof.asizeof(xml)) + " xml")
