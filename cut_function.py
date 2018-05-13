@@ -19,8 +19,9 @@ def cutoutpbf(sourceFilename, left, bottom, right, top, osmosis):
        (type(right) is float) & (type(top) is float):
         commandstring = osmosis + " --read-pbf " + sourceFilename + " --bounding-box top=" + str(top) + \
                         " left=" + str(left) + " bottom=" + str(bottom) + " right=" + str(
-            right) + " --write-pbf file=" + \
+            right) + " completeWays=yes completeRelations=yes --write-pbf file=" + \
                         str(left) + "-" + str(bottom) + "-" + str(right) + "-" + str(top) + ".osm.pbf omitmetadata=true" #inPipe.0=\"w\"
+        #clipIncompleteEntities=true
         #print(commandstring)
         #with open(sourceFilename, "rb") as sourcefile:
         proc = subprocess.Popen(commandstring, stdout=subprocess.PIPE)

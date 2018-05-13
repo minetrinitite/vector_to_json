@@ -25,9 +25,9 @@ def definegeometry(coordinates):
         return LineString(coordinates)
 
 
-def parseXML(xmlFile):
+def parseOSM(osmFile):
     xmltag = re.compile(r"<\?.*xml.*\?>", re.IGNORECASE)
-    with open(xmlFile, 'r', encoding='utf-8') as fobj:
+    with open(osmFile, 'r', encoding='utf-8') as fobj:
         xml = fobj.read()
         xml = xmltag.sub("", string=xml)
 
@@ -38,8 +38,8 @@ def parseXML(xmlFile):
     counter = 0
     accomodationinfo = {}
     savedforlater = []
-
-    with open("result.geojson", 'w', encoding='utf-8') as resultfile:
+    geojsonfile = osmFile[:-3] + "geojson"
+    with open(geojsonfile, 'w', encoding='utf-8') as resultfile:
         for appt in root.getchildren():
             props = {}
 
@@ -67,7 +67,8 @@ def parseXML(xmlFile):
                 for elem in appt.getchildren():
                     if elem.tag == "nd":
                         ref = elem.get("ref")
-                        coordinates.append(points[str(ref)]["coordinates"])
+                        if str(ref) in points:
+                            coordinates.append(points[str(ref)]["coordinates"])
                     else:
                         key = elem.get("k")
                         value = "" + elem.get("v")
@@ -117,10 +118,9 @@ def parseXML(xmlFile):
                     key = elem.get("k")
                     value = elem.get("v")
                     props.update({key: value})
-
-
             for member in members:
-                geometries.append(realfuturecollection[accomodationinfo[member[0]]]["geometry"])
+                if member[0] in accomodationinfo:
+                    geometries.append(realfuturecollection[accomodationinfo[member[0]]]["geometry"])
             geometry = GeometryCollection(list(geometries))
             with Feature(geometry=geometry, id=id, properties=props) as feature:
                 realfuturecollection.append(feature)
@@ -129,16 +129,18 @@ def parseXML(xmlFile):
 
         features = FeatureCollection(realfuturecollection)
         dump(features, resultfile)
-        print(str(asizeof.asizeof(points)) + " points")
-        print(str(asizeof.asizeof(features)) + " features")
-        print(str(asizeof.asizeof(realfuturecollection)) + " realfuturcollection")
-        print(features["features"][0] is realfuturecollection[0])
-    with open('result.geojson', encoding="utf8") as f:
+    print(geojsonfile + " is ready")
+    print(str(asizeof.asizeof(points)) + " points")
+    print(str(asizeof.asizeof(features)) + " features")
+    print(str(asizeof.asizeof(realfuturecollection)) + " realfuturcollection")
+    print(features["features"][0] is realfuturecollection[0])
+    with open(geojsonfile, encoding="utf8") as f:
         obj = json.load(f)
 
     outfile = open('resultbeauty.geojson', "w", encoding="utf8")
     outfile.write(json.dumps(obj, ensure_ascii=False, indent=4))
     outfile.close()
+    return geojsonfile
 
-if __name__ == "__main__":
-    parseXML("sampleData1.osm")
+#if __name__ == "__main__":
+#    parseOSM("sampleData1.osm")
